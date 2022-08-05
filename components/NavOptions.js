@@ -3,7 +3,7 @@ import React from "react";
 import NavOption from "./NavOption";
 import tw from "twrnc";
 
-export default function NavOptions() {
+export default function NavOptions({}) {
   const data = [
     {
       id: "123",
