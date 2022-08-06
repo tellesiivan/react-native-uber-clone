@@ -16,12 +16,10 @@ export default function MapScreen() {
     <View>
       <View style={tailwind`h-1/2 relative`}>
         <TouchableOpacity
-          style={tailwind`absolute h-14 w-14 rounded-full top-12 left-4 bg-white z-40 shadow-xl flex items-center justify-center`}
+          style={tailwind`absolute h-12 w-12  rounded-full top-12 left-4 bg-white z-40 shadow-2xl flex items-center justify-center`}
           onPress={() => navigation.goBack()}
         >
-          <View>
-            <Text style={tailwind`font-semibold text-black`}>Back</Text>
-          </View>
+          <Icon name="home-outline" type="ionicon" />
         </TouchableOpacity>
 
         <Map />

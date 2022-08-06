@@ -1,17 +1,18 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import tailwind from "twrnc";
 import { selectOrigin, selectDestination } from "../slices/navSlice";
-
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_MAPS_KEY } from "@env";
 import { useEffect, useRef } from "react";
+import { setTravelTimeInfo } from "../slices/navSlice";
 
 export default function Map() {
   const mapRef = useRef(null);
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (origin || destination) {
@@ -22,6 +23,23 @@ export default function Map() {
 
     // zoom and fit markets
   }, [destination, origin]);
+
+  useEffect(() => {
+    if (origin || destination) {
+      try {
+        const calcDistance = async () => {
+          const URL = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.description}&destinations=${destination.description}&key=${GOOGLE_MAPS_KEY}`;
+          const req = await fetch(URL);
+          if (!req.ok) throw new Error("unable to fetch ");
+          const res = await req.json();
+          dispatch(setTravelTimeInfo(res.rows[0].elements[0]));
+        };
+        calcDistance();
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  }, [GOOGLE_MAPS_KEY, origin, destination]);
 
   return (
     <View style={tailwind``}>
